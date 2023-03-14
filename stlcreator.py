@@ -1,22 +1,24 @@
 import numpy as np
 from stl import mesh
+import pyvista as pv
 
-width = 16 #mm
+# Constants
+WIDTH = 16 #mm
+LENGTH = 20
 
-def calcBorderOfTemplate(a, b, c):
-    vertices = np.array([[0, yVal(0, a, b, c), +1],
-                         [0, yVal(0, a, b, c), -1]])
+def generateMeshForNailShape(a, b, c):
+    vertices = np.array([[0, yValForPntX(0, a, b, c), +1],
+                         [0, yValForPntX(0, a, b, c), -1]])
     
     # iterate for 4 right, and 4 left nodes, each standing for 0.2 mm
     for x in range(1,5):
         x = x*2
-        y = yVal(x, a, b, c)
+        y = yValForPntX(x, a, b, c)
         vertices = np.append(vertices, [[+x, y, +1],
                                         [-x, y, +1],
                                         [+x, y, -1],
                                         [-x, y, -1]], axis=0)
-    
-    LENGTH = 20
+        
     #Adding height vertices.
     vertices = np.append(vertices, [
         [-8, LENGTH, +1], # Top-Left      n:18
@@ -54,6 +56,7 @@ def calcBorderOfTemplate(a, b, c):
     topNodes = [15,11,7,3,0,2,6,10,14,19]
     bottomNodes = [17,13,9,5,1,4,8,12,16,20]
     
+    # Knit faces
     for i in range(len(topNodes)-1): #topNodes = bottomNodes
         faces = np.append(faces, [
             [18, topNodes[i], topNodes[i+1]],
@@ -66,11 +69,23 @@ def calcBorderOfTemplate(a, b, c):
         for j in range(3):
             surface.vectors[i][j] = vertices[f[j],:]
 
-    # surface.save('surface.stl')
+    surface.save("diff.stl")
 
-
-def yVal(x,a,b,c):
+# Y values for the point x based on the polynomic curve
+def yValForPntX(x,a,b,c):
     return a*x**2 + b*x + c
 
+def combineMeshes(basefile, a, b, c):
+    generateMeshForNailShape(a, b, c)
+    baseFile = pv.read(basefile)
+    partToDiff = pv.read("diff.stl")
+    return baseFile.boolean_difference(partToDiff)
 
-calcBorderOfTemplate(0.25,-1,0)
+def generateCustomizedSTL(a, b, c):
+    data = combineMeshes("nail_polisher.stl", a, b, c)
+    data.save("data.stl")
+
+# Run for the sample curve 
+generateMeshForNailShape(0.25,-1,0)
+
+generateCustomizedSTL(0.25, -1, 0)
