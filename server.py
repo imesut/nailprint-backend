@@ -16,5 +16,5 @@ def configure_polisher():
     fN = str(time.time()) + ".jpg"
     with open(fN, "wb") as fh:
         fh.write(base64.b64decode(img))
-    response = processHandPhoto(img)
+    response = processHandPhoto(fN)
     return response
