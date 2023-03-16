@@ -97,3 +97,27 @@ def resize(img, height=800):
     """ Resize image to given height """
     rat = height / img.shape[0]
     return cv2.resize(img, (int(rat * img.shape[1]), height))
+
+
+
+
+# --
+
+# # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# # cv2.imshow('image', gray)
+# # cv2.waitKey(0)
+# # cv2.destroyAllWindows()
+# edges = cv2.Canny(img, 0, 50, L2gradient=True)
+# contours, hierarchy = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+# print(len(contours))
+
+# largest_contour = max(contours, key=cv2.contourArea)
+
+# # Draw the largest contour on the original image
+# cv2.drawContours(img, largest_contour, -1, (255, 0, 0))
+
+# # Show the result
+# cv2.imshow('result', img)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()

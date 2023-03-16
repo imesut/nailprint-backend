@@ -1,5 +1,7 @@
 from flask import Flask, request
 import base64
+import time
+from cv import processHandPhoto
 
 app = Flask(__name__)
 
@@ -11,6 +13,8 @@ def hello_world():
 def configure_polisher():
     img = request.form.get("img")
     img = img.replace(" ", "+")
-    with open("img.jpg", "wb") as fh:
+    fN = str(time.time()) + ".jpg"
+    with open(fN, "wb") as fh:
         fh.write(base64.b64decode(img))
-    return "Processing Photo"
+    response = processHandPhoto(img)
+    return response

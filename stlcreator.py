@@ -81,11 +81,11 @@ def combineMeshes(basefile, a, b, c):
     partToDiff = pv.read("diff.stl")
     return baseFile.boolean_difference(partToDiff)
 
-def generateCustomizedSTL(a, b, c):
+def generateCustomizedSTLforFinger(fileName, a, b, c):
     data = combineMeshes("nail_polisher.stl", a, b, c)
-    data.save("data.stl")
+    data.save(fileName)
 
-# Run for the sample curve 
-generateMeshForNailShape(0.25,-1,0)
+# Run for the sample curve
+# generateMeshForNailShape(0.25,-1,0)
 
-generateCustomizedSTL(0.25, -1, 0)
+# generateCustomizedSTLforFinger(0.25, -1, 0)
