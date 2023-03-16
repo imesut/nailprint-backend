@@ -18,12 +18,7 @@ def processHandPhoto(imgFileName):
     
     img = cv2.imread(imgFileName)
     imageRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    # newImg = extractPage(imageRGB)
-    # showImg(img)
-    # showImg(newImg)
-
     results = hands.process(imageRGB)
-
     imgGRY = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     imgGryBlur = cv2.medianBlur(imgGRY, 5)
 
@@ -65,21 +60,16 @@ def processHandPhoto(imgFileName):
                     contours, hierarchy = cv2.findContours(nailPrcsd, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
                     for contour in contours:
                         perimeter = cv2.arcLength(contour, True)
-                        approx = cv2.approxPolyDP(contour, 0.03 * perimeter, True)
-                        # if len(approx) > 2:
-                            # print(approx)    
-                    # showImg(nailPrcsd)
+                        approx = cv2.approxPolyDP(contour, 0.03 * perimeter, True)   
                     
                     yLen = len(nailPrcsd)
                     xLen = len(nailPrcsd[0])
                     bottomCurve = nailPrcsd[int(yLen/2):yLen, int(xLen/3):int(2*xLen/3)]
-                    # showImg(bottomCurve)
                     
                     yLen = len(bottomCurve)
                     xLen = len(bottomCurve[0])
                     yvals = []
                     xvals = []
-                    # print("xlen", xLen, "ylen", yLen)
                     
                     for y in range(yLen):
                         line = bottomCurve[y]
@@ -87,16 +77,10 @@ def processHandPhoto(imgFileName):
                             if line[x] > 0:
                                 xvals.append(x)
                                 yvals.append(yLen - y)
-                                    
-                    # print(xvals)
-                    # print(yvals)
-                    
+                                        
                     params, cov = curve_fit(approximation, xvals, yvals)
                     filename = FOLDERNAME + "/" + str(fingerCount) + ".stl"
                     generateCustomizedSTLforFinger(filename, params[0], params[1], params[2])
-                                        
-                    # print(params)
-                    # print(cov)
                     
                     print("finger:", fingerCount, params)
                     
