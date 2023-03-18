@@ -98,7 +98,7 @@ def processHandPhoto(imgFileName):
                 ARCHIVEFILE = base64.b64encode(zipFile.read())
     
     message = ""
-    if fingerCount > 0:
+    if fingerCount < 1:
         message = "No finger can be identified successfully. You may try to take photo with different lightning conditions."
     else:
         message = "We identified " + str(fingerCount) + " fingers. You can download this archive file for 3D-printable templates. For other fingers you may try to take another photo."
